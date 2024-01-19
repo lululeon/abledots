@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Grid } from './lib/model'
+  import { Grid } from './lib/grid'
 
   function gameSetup(node: HTMLElement) {
 		// mounted
@@ -7,9 +7,10 @@
     const canvas = document.getElementById('grid')! as HTMLCanvasElement
     const btnStart = document.getElementById('start')!
     const btnStop = document.getElementById('stop')!
+    const btnClear = document.getElementById('clear')!
 
     const ctx : CanvasRenderingContext2D = canvas.getContext('2d')!
-    const g = new Grid(ctx, 150, 150)
+    const g = new Grid(ctx, 10, 120, 60) // 10 x (120 x 80) = 1200 x 800 canvas
 
     let playing = false
     let animationTimeoutRef: number|undefined
@@ -24,36 +25,35 @@
       }, 200)
     }
 
-    btnStop.addEventListener('click', () => {
-      playing = false
-      console.log('started')
-      window.clearTimeout(animationTimeoutRef)
-    })
-
-    btnStart.addEventListener('click', () => {
+    const startGame = () => {
       playing = true
-      console.log('started')
-      window.requestAnimationFrame(animationCallback)
-    })
+      window.requestAnimationFrame(animationCallback!)
+    }
 
-		return {
-			destroy() {
-				console.log('game destroyed')
-			}
-		};
+    const pauseGame = () => {
+      playing = false
+      window.clearTimeout(animationTimeoutRef)
+    }
+
+    btnStart.addEventListener('click', startGame)
+    btnStop.addEventListener('click', pauseGame)
+
+    return {
+      destroy() {
+        console.log('game destroyed')
+      }
+    }
 	}
-
 </script>
 
 <main use:gameSetup>
   <div id="gridWrapper">
-    <canvas id="grid" width="500" height="500" class="">
+    <canvas id="grid" width="1200" height="600" class="">
     </canvas>
   </div>
   <div class="controls">
     <button id="start" aria-label="start">start</button>
     <button id="stop" aria-label="stop">stop</button>
-    <button id="clear" aria-label="clear">clear</button>
   </div>
 </main>
 
