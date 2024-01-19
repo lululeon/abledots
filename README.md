@@ -1,47 +1,36 @@
-# Svelte + TS + Vite
+# Abledots: A Life-like "Game of Life" Cellular Automata game
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+# Codebase
 
-## Recommended IDE Setup
+## Seed code
+The best approach on the interwebs to date (that I've found) for using canvas for cell rendering, I'd credit entirely to **spicy yogurt**, (:pray: big hat tip!) via this article:
+- https://spicyyoghurt.com/tutorials/javascript/conways-game-of-life-canvas
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _ever_. **Spicy yogurt's** article is such an elegant introduction to the problem domain that I didn't even get to the end of the article; I started implementing right away (and immediately ran into trouble which I had to backtrack and fix, only to find out it's discussed a little later on the page, haha). Got the origin game (the `B3/S23` ruleset) up and running after tweaking the approach slightly, with a view to imposing new rules and parameters over time.
 
-## Need an official Svelte framework?
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+**Approach**
+The rendering approach uses HTML Canvas directly (as mentioned above), with:
+- A `Grid` class to encapsulate grid / layout concerns as well as (for now) implementing the main GOL algo. I foresee algo implementation being abstracted to a higher level "game" component eventually.
+- A `Cell` class to represent individual cells (the cell matrix is "superimposed" onto a simple array with a wee bit of coordinate math).
+- The browser's `requestAnimationFrame` hook for smooth rendering.
 
-## Technical considerations
+## Developer Guide
+- This codebase uses typescript and is based on a nodejs **[vite](https://vitejs.dev/)** app with support for **[svelte](https://svelte.dev/)**.
+- The package manager for this repo is `pnpm`, so to run the app after pulling / forking this repo:
+  - `pnpm install`
+  - `pnpm dev`
+- There are two apps:
+  - `GOL.svelte` - the main app
+  - `Test.svelte` - a visual testing app. For now it is just three 3x3 grids representing initial state and 2 follow-up iterations. The test variant cells have a larger aperture and are labelled; additionally there are some extra console logs for debugging.
 
-**Why use this over SvelteKit?**
+---
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+# Rulesets / Experiments
+- :white_check_mark: done
+- :test_tube: in progress
+- :wastebasket: abandoned
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+ruleset id | shorthand | name & description| status
+-----------|-----------|---------------------------|-----
+1 | B3/S23 | Original [Conway's game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life). | :white_check_mark: done
