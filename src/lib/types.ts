@@ -1,8 +1,10 @@
 export enum Status {
   Dead,
   Alive,
+  Resource,
 }
 
 export type CellMeta = {
-  neighborCount: number
+  neighbors: number
+  health: number
 }

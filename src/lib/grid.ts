@@ -62,8 +62,13 @@ export class Grid {
         neighbours.forEach((_) => console.log(_?.label()))
       }
 
-      const n = neighbours.reduce((runningCount, nextCell) => runningCount + ((nextCell!.status === Status.Alive) ? 1 : 0), 0)
-      cell.setNeighborCount(n)
+     const {n, r} = neighbours.reduce((accumulator:any, nextCell) => {
+        if (nextCell!.status === Status.Alive)  accumulator.n += 1
+        if (nextCell!.status === Status.Resource) accumulator.r += 1
+        return accumulator
+      }, { n:0, r:0 })
+      
+      cell.setMeta(n, r)
     }
 
     if(debug) {
@@ -92,7 +97,7 @@ export class Grid {
   reseed () {
     for (let i = 0; i < this.cellmatrix.length; i++) {
       const cell = this.cellmatrix[i]
-      cell.reseeed()
+      cell.reseed()
       cell.render(this.context, this.aperture)
     }
   }
