@@ -1,19 +1,20 @@
 <script lang="ts">
   import { Grid } from './lib/grid'
+  import { GameRule } from './lib/types'
 
   function gameSetup(node: HTMLElement) {
-		// mounted
+    // mounted
     console.log('mounted')
     const canvas = document.getElementById('grid')! as HTMLCanvasElement
     const btnStart = document.getElementById('start')!
     const btnStop = document.getElementById('stop')!
-    const btnClear = document.getElementById('clear')!
+    const btnR20 = document.getElementById('r20')!
 
-    const ctx : CanvasRenderingContext2D = canvas.getContext('2d')!
+    const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
     const g = new Grid(ctx, 10, 120, 60) // 10 x (120 x 80) = 1200 x 800 canvas
 
     let playing = false
-    let animationTimeoutRef: number|undefined
+    let animationTimeoutRef: number | undefined
 
     g.render()
 
@@ -37,26 +38,26 @@
 
     btnStart.addEventListener('click', startGame)
     btnStop.addEventListener('click', pauseGame)
+    btnR20.addEventListener('click', () => g.toggleRule(GameRule.R20_RCELLS))
 
     return {
       destroy() {
         console.log('game destroyed')
-      }
+      },
     }
-	}
+  }
 </script>
 
 <main use:gameSetup>
   <div id="gridWrapper">
-    <canvas id="grid" width="1200" height="600" class="">
-    </canvas>
+    <canvas id="grid" width="1200" height="600" class=""> </canvas>
   </div>
   <div class="controls">
     <button id="start" aria-label="start">start</button>
     <button id="stop" aria-label="stop">stop</button>
+    <button id="r20" aria-label="stop">toggle rule-R20</button>
   </div>
 </main>
 
 <style>
-
 </style>
