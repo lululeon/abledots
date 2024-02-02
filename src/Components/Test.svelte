@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Grid } from './lib/Grid'
-  import { Rule } from './lib/types'
-  import { RulesEngine } from './lib/rules/RulesEngine'
+  import { Grid } from '../lib/Grid'
+  import { Rule } from '../lib/types'
+  import { RulesEngine } from '../lib/rules/RulesEngine'
 
   function testSetup(_node: HTMLElement) {
     // mounted

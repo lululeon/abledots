@@ -12,6 +12,7 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
 - [approach](./docs/approach.md)
 - [dev guide](./docs/dev-guide.md)
 
+
 ---
 
 # Codebase
@@ -25,14 +26,20 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
 **TODOs**
 
 - [x] add prettier
-- [ ] remove remnants of sample vite app
-- [ ] proper app interface / ux (learn svelte, lol)
+- [x] remove remnants of sample vite app
+- [ ] stub out app interface / ux
+  - [x] stub out flow of control
+  - [ ] add tailwind
+  - [ ] add ability to load main app vs the visual tester
 - [x] impl iteration modes/config so that rulesets can be enabled/disabled
-- [x] refactor classes a bit to separate out rules engine(s)
-- [ ] rename cell, grid methods to better align with RulesEngine naming / refine naming
-- [ ] document rules engine
-- [ ] impl rulewise injectable / custom cell metadata
-- [ ] generalized "neighbors reducer" with ability to register checks from each RuleExpression so that we don't execute that loop more times than we have to
+- [ ] architect for future experimenting / playing with rulesets
+  - [x] refactor classes a bit to separate out rules engine(s)
+  - [ ] rename cell, grid methods to better align with RulesEngine naming / refine naming
+  - [ ] stub out initial test harness / need basic unit tests
+  - [ ] generalized "neighbors reducer" with ability to register checks from each RuleExpression so that we don't execute that loop more times than we have to
+  - [ ] impl rulewise injectable / custom cell metadata
+  - [ ] document rules engine
+- [ ] ux enhancements
 
 ---
 
