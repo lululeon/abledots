@@ -1,17 +1,18 @@
 <script lang="ts">
-  import { Grid } from './lib/grid'
-  import { GameRule } from './lib/types'
+  import { Grid } from './lib/Grid'
+  import { Rule } from './lib/types'
+  import { RulesEngine } from './lib/rules/RulesEngine'
 
   function gameSetup(node: HTMLElement) {
-    // mounted
-    console.log('mounted')
+    const rulesEngine: RulesEngine = new RulesEngine([Rule.DefaultB3S23, Rule.R20_RCELLS])
+    rulesEngine.toggleRule(Rule.R20_RCELLS) //switched off at start
     const canvas = document.getElementById('grid')! as HTMLCanvasElement
     const btnStart = document.getElementById('start')!
     const btnStop = document.getElementById('stop')!
     const btnR20 = document.getElementById('r20')!
 
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
-    const g = new Grid(ctx, 10, 120, 60) // 10 x (120 x 80) = 1200 x 800 canvas
+    const g = new Grid(ctx, rulesEngine, 10, 120, 60) // 10 x (120 x 80) = 1200 x 800 canvas
 
     let playing = false
     let animationTimeoutRef: number | undefined
@@ -38,7 +39,10 @@
 
     btnStart.addEventListener('click', startGame)
     btnStop.addEventListener('click', pauseGame)
-    btnR20.addEventListener('click', () => g.toggleRule(GameRule.R20_RCELLS))
+    btnR20.addEventListener('click', () => {
+      g.rulesEngine.toggleRule(Rule.R20_RCELLS)
+      g.reseed()
+    })
 
     return {
       destroy() {

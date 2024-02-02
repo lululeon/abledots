@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Grid } from './lib/grid'
+  import { Grid } from './lib/Grid'
+  import { Rule } from './lib/types'
+  import { RulesEngine } from './lib/rules/RulesEngine'
 
   function testSetup(_node: HTMLElement) {
     // mounted
@@ -11,8 +13,11 @@
     const ctx1: CanvasRenderingContext2D = canvas1.getContext('2d')!
     const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!
     const ctx3: CanvasRenderingContext2D = canvas3.getContext('2d')!
+
+    const rulesEngine: RulesEngine = new RulesEngine([Rule.DefaultB3S23])
+
     // const g1 = new Grid(ctx1, 100, 3, 3)
-    const g1 = new Grid(ctx1, 100, 3, 2)
+    const g1 = new Grid(ctx1, rulesEngine, 100, 3, 2)
 
     g1.toggleDebug()
     g1.render()
