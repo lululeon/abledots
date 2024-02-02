@@ -70,5 +70,5 @@ The objs are pretty loose/open, esp the Grid class - honestly just a glorified P
 | ruleset id | shorthand | basis   | name & description                                                                       | status                  |
 | ---------- | --------- | ------- | ---------------------------------------------------------------------------------------- | ----------------------- |
 | 10         | B3/S23    | $N_{0}$ | Original [Conway's game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life). | :white_check_mark: done |
-| 20         | R         | $N_{0}$ | Randomly seed 10% of cells as [resource cells](./docs/rule-20-resource-cells.md).        | :white_check_mark: done |
+| 20         | R         | $N_{0}$ | Randomly seed 10% of cells as [resource cells](docs/rule-20-resource-cells.md).        | :white_check_mark: done |
 | 30         | TR        | $N_{0}$ | Movement toward resource cells                                                           | :test_tube: in progress |
