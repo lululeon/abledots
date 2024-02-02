@@ -1,7 +1,5 @@
 # Abledots: A Life-like "Game of Life" Cellular Automata game
 
-# Codebase
-
 ## Seed code
 
 The best approach on the interwebs to date (that I've found) for using canvas for cell rendering, I'd credit entirely to **spicy yogurt**, (:pray: big hat tip!) via this article:
@@ -10,27 +8,10 @@ The best approach on the interwebs to date (that I've found) for using canvas fo
 
 Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _ever_. **Spicy yogurt's** article is such an elegant introduction to the problem domain that I didn't even get to the end of the article; I started implementing right away (and immediately ran into trouble which I had to backtrack and fix, only to find out it's discussed a little later on the page, haha). Got the origin game (the `B3/S23` ruleset) up and running after tweaking the approach slightly, with a view to imposing new rules and parameters over time.
 
-**Approach**
-The rendering approach uses HTML Canvas directly (as mentioned above), with:
+## Docs
+- [approach](./docs/approach.md)
+- [dev guide](./docs/dev-guide.md)
 
-- A `Grid` class to encapsulate grid / layout concerns (the cell matrix is "superimposed" onto a simple array with a wee bit of coordinate math).
-- A `Cell` class to represent individual cells affected by the algos.
-- Some `RuleExpression` variants to abstract away concerns about how each algo is implemented: they get callbacks to do whatever it is they need to do.
-- A `RulesEngine` class which instantiates and manages all the rules to be applied to the grid
-
-The browser's `requestAnimationFrame` hook is used for smooth rendering (though, updates aren't frenetic enough to really run into rendering issues).
-
-The objs are pretty loose/open, esp the Grid class - honestly just a glorified POJO masquerading behind 'Class'-ist pretensions... Also, I foresee chunks of implementation being abstracted to a higher level "game" component eventually.
-
-## Developer Guide
-
-- This codebase uses typescript and is based on a nodejs **[vite](https://vitejs.dev/)** app with **[svelte](https://svelte.dev/)** (just because / an excues to try svelte - but this thing doesn't have a UX yet).
-- The package manager for this repo is `pnpm`, so to run the app after pulling / forking this repo:
-  - `pnpm install`
-  - `pnpm dev`
-- There are two apps:
-  - `GOL.svelte` - the main app
-  - `Test.svelte` - a visual testing app. For now it is just three 3x3 grids representing initial state and 2 follow-up iterations. The test variant cells have a larger aperture and are labelled; additionally there are some extra console logs for debugging.
 
 ---
 
