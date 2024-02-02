@@ -13,11 +13,14 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
 **Approach**
 The rendering approach uses HTML Canvas directly (as mentioned above), with:
 
-- A `Grid` class to encapsulate grid / layout concerns as well as (for now) implementing the main GOL algo. I foresee algo implementation being abstracted to a higher level "game" component eventually.
-- A `Cell` class to represent individual cells (the cell matrix is "superimposed" onto a simple array with a wee bit of coordinate math).
-- The browser's `requestAnimationFrame` hook for smooth rendering.
+- A `Grid` class to encapsulate grid / layout concerns (the cell matrix is "superimposed" onto a simple array with a wee bit of coordinate math).
+- A `Cell` class to represent individual cells affected by the algos.
+- Some `RuleExpression` variants to abstract away concerns about how each algo is implemented: they get callbacks to do whatever it is they need to do.
+- A `RulesEngine` class which instantiates and manages all the rules to be applied to the grid
 
-The "classes" are pretty loose; more just a code organisation feature... and Grid and Cell are tightly coupled for now.
+The browser's `requestAnimationFrame` hook is used for smooth rendering (though, updates aren't frenetic enough to really run into rendering issues).
+
+The objs are pretty loose/open, esp the Grid class - honestly just a glorified POJO masquerading behind 'Class'-ist pretensions... Also, I foresee chunks of implementation being abstracted to a higher level "game" component eventually.
 
 ## Developer Guide
 
@@ -45,6 +48,11 @@ The "classes" are pretty loose; more just a code organisation feature... and Gri
 - [ ] remove remnants of sample vite app
 - [ ] proper app interface / ux (learn svelte, lol)
 - [x] impl iteration modes/config so that rulesets can be enabled/disabled
+- [x] refactor classes a bit to separate out rules engine(s)
+- [ ] rename cell, grid methods to better align with RulesEngine naming / refine naming
+- [ ] document rules engine
+- [ ] impl rulewise injectable / custom cell metadata
+- [ ] generalized "neighbors reducer" with ability to register checks from each RuleExpression so that we don't execute that loop more times than we have to
 
 ---
 

@@ -1,20 +1,17 @@
+import type { Cell } from './Cell'
+
 export enum Status {
   Dead,
   Alive,
   Resource,
 }
 
-export enum GameRule {
+export enum Rule {
+  DefaultB3S23 = 'DefaultB3S23',
   R20_RCELLS = 'R20_RCELLS',
 }
 
 export type CellMeta = {
-  neighbors: number
-  resources: number
-  health: number
-}
-
-export type GameMode = {
-  debug: boolean
-  ruleset: Record<GameRule, boolean>
+  neighborCount: number
+  resourceCount: number
 }
