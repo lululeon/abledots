@@ -11,8 +11,6 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
 ## Docs
 - [approach](./docs/approach.md)
 - [dev guide](./docs/dev-guide.md)
-- [resource cells](docs/rule-20-resource-cells.md).
-
 
 ---
 
