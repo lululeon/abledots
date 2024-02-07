@@ -29,7 +29,7 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
 - [x] remove remnants of sample vite app
 - [ ] stub out app interface / ux
   - [x] stub out flow of control
-  - [ ] add tailwind
+  - [x] add tailwind
   - [ ] add ability to load main app vs the visual tester
 - [x] impl iteration modes/config so that rulesets can be enabled/disabled
 - [ ] architect for future experimenting / playing with rulesets
@@ -39,6 +39,7 @@ Before _abledots_ I had had zero reasons to wrangle HTMLCanvas, for anything, _e
   - [ ] generalized "neighbors reducer" with ability to register checks from each RuleExpression so that we don't execute that loop more times than we have to
   - [ ] impl rulewise injectable / custom cell metadata
   - [ ] document rules engine
+- [ ] imple [canvas optimisations](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas)s
 - [ ] ux enhancements
 
 ---

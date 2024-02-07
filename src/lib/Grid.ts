@@ -113,6 +113,7 @@ export class Grid {
   reseed() {
     for (let i = 0; i < this.cellmatrix.length; i++) {
       const cell = this.cellmatrix[i]
+      cell.wipe()
       this.rulesEngine.cellCreateSignal(cell)
     }
     this.iterate()
