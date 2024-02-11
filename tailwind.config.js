@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Dosis', 'sans-serif'],
-        caption: ['Chango', 'sans-serif'],
+        sans: ['Montserrat', 'sans-serif'],
+        caption: ['Berkshire Swash', 'sans-serif'],
       },
     },
   },

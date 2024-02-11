@@ -1,37 +1,45 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { debounced } from './lib/utils'
-  import GOL from './Components/GOL.svelte'
+  import { type GOLApi } from './lib/types'
+  import { gameBuilder } from './lib/gameBuilder'
+  import Button from './Components/Button.svelte'
 
   const aperture = 10
 
-  // a scope for the game to bound to
-  let gol: GOL
+  let canvas: HTMLCanvasElement
+  let gol: GOLApi
 
-  // must be multiples of aperture. TODO: make configurable / reactive
   let width: number = 0
   let height: number = 0
+  let displayReady = false
+
+  // TODO: move to a proper store
+  let playStateLabel: string = 'Begin'
+  let toggleState: () => void
+  const setPlayStateLabel = (label: string) => (playStateLabel = label)
 
   const setDims = () => {
-    // sidebar is w-50 => 208px of horizontal real estate.
+    // sidebar is w-560 => 240px of horizontal real estate. all round padding p-4 => 16px x 2 = 32px
     // Also need to ensure integer dims (multiples of aperture) so that canvas doesn't have to work so hard
-    width = Math.floor((window.innerWidth - 208) / aperture) * aperture
-    height = Math.floor(window.innerHeight / aperture) * aperture
+    width = Math.floor((window.innerWidth - 240 - 32) / aperture) * aperture
+    height = Math.floor((window.innerHeight - 32) / aperture) * aperture
   }
 
   const onViewportResize = debounced(() => {
-    // width = document.getElementById('displaybox')!.offsetWidth
-    // height = document.getElementById('displaybox')!.offsetHeight
     setDims()
-    gol.setupFunc && gol.setupFunc()
+    gol.resizeFn(width, height)
   })
-  document.body.addEventListener('viewportchanged', onViewportResize)
 
   onMount(() => {
-    // initialise dimensions
-    width = document.getElementById('displaybox')!.offsetWidth
-    height = document.getElementById('displaybox')!.offsetHeight
+    setDims()
+    canvas = document.getElementById('grid')! as HTMLCanvasElement
+    const game = gameBuilder(canvas, width, height)
+    gol = game.gameController
+    toggleState = gol.togglePlayState(setPlayStateLabel)
+
     window.addEventListener('resize', onViewportResize)
+    displayReady = true
 
     return () => {
       window.removeEventListener('resize', onViewportResize)
@@ -39,42 +47,21 @@
   })
 
   $: dimsNotif = `dimensions: ${width}px X ${height}px`
-  $: displayReady = width * height > 0
 </script>
 
-<div id="wrapper" class="w-full m-0 p-0">
+<div id="wrapper" class="w-full m-0 p-0 flex">
   <div class="flex min-h-screen w-full flex-row bg-gray-100 text-gray-800">
     <aside
-      class="sidebar w-52 -translate-x-full transform bg-white p-4 transition-transform duration-150 ease-in md:translate-x-0 md:shadow-md"
+      class="sidebar w-60 flex flex-col justify-start -translate-x-full transform bg-white p-4 transition-transform duration-150 ease-in md:translate-x-0 md:shadow-md"
     >
       {#if displayReady}
-        <h2 class="text-xl">Control Panel</h2>
-        <p class="font-smalltext">{dimsNotif}</p>
-        <div class="inline-flex rounded-md shadow-sm my-3" role="group">
-          <button
-            on:click={gol.startFn}
-            type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-          >
-            Start
-          </button>
-
-          <button
-            on:click={gol.pauseFn}
-            type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-          >
-            Pause
-          </button>
-        </div>
-        <div class="my-3">
-          <button
-            on:click={gol.toggleR20}
-            type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border rounded border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-          >
-            toggle Rule R20
-          </button>
+        <h2 class="text-xl font-caption text-center my-3">Control Panel</h2>
+        <p class="text-sm text-center">{dimsNotif}</p>
+        <hr class="my-2" />
+        <div class="inline-flex flex-col items-stretch my-3" role="group">
+          <Button on:click={toggleState} bind:label={playStateLabel}></Button>
+          <Button on:click={gol.toggleR20} label="toggle Rule R20"></Button>
+          <!-- <Button on:click={gol.resetFn} label="Reset"></Button> -->
         </div>
       {:else}
         Loading...
@@ -83,20 +70,11 @@
     <main
       class="main -ml-48 flex flex-grow flex-col p-4 transition-all duration-150 ease-in md:ml-0"
     >
-      <div
-        id="displaybox"
-        class="flex h-full items-center justify-center bg-white text-center text-5xl font-bold shadow-md"
-      >
+      <div id="displaybox" class="flex h-full items-center justify-center bg-white shadow-md">
         <div class="golgrid">
-          <GOL {aperture} bind:width bind:height bind:this={gol} />
+          <canvas id="grid" {width} {height} />
         </div>
       </div>
     </main>
   </div>
 </div>
-
-<style>
-  #wrapper {
-    display: flex;
-  }
-</style>

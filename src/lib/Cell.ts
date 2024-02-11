@@ -1,5 +1,4 @@
-import type { CellMeta } from './types.ts'
-import { Status } from './types.ts'
+import { Status, type CellMeta } from './types'
 
 export const colormap: Record<Status, string> = {
   [Status.Dead]: '#eeeeee',
@@ -22,7 +21,14 @@ export class Cell {
     this.wipe()
   }
 
-  wipe() {
+  static fromCell(c: Cell) {
+    const [x, y] = c.coords()
+    const newCell = new this(x, y)
+    newCell.setStatus(c.getStatus())
+    return newCell
+  }
+
+  private wipe() {
     this.meta = {
       neighborCount: NaN,
       resourceCount: NaN,
@@ -51,7 +57,7 @@ export class Cell {
 
     // min aperture size for this is 30px, for visual debugging
     if (withLabels) {
-      context.font = '8px sans-serif'
+      context.font = '10px sans-serif'
       context.fillStyle = `rgb(0, 0, 0)`
       context.fillText(this.label(), _x + 5, _y + 10)
     }

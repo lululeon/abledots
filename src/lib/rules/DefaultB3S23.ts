@@ -1,4 +1,4 @@
-import { RuleExpression } from './RuleExpression'
+import { RuleExpression } from '../RuleExpression'
 import { Rule } from '../types'
 import { Status } from '../types'
 import { Cell } from '../Cell'
