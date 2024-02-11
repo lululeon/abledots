@@ -1,5 +1,5 @@
-import { Rule } from '../types'
-import { Cell } from '../Cell'
+import { Rule } from './types'
+import { Cell } from './Cell'
 
 export abstract class RuleExpression {
   private id: Rule

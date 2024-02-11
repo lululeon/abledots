@@ -5,7 +5,7 @@
   - `pnpm install`
   - `pnpm dev`
 - There are two apps:
-  - `GOL.svelte` - the main app
+  - `App.svelte` - the main app
   - `Test.svelte` - a visual testing app. For now it is just three 3x3 grids representing initial state and 2 follow-up iterations. The test variant cells have a larger aperture and are labelled; additionally there are some extra console logs for debugging.
 
 ## Grid overview

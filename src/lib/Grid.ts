@@ -1,5 +1,5 @@
 import { Cell } from './Cell'
-import { RulesEngine } from './rules/RulesEngine'
+import { RulesEngine } from './RulesEngine'
 import { truthify } from './utils'
 
 export class Grid {
@@ -9,34 +9,31 @@ export class Grid {
   gridCols: number
   gridRows: number
   cellmatrix: Cell[] = []
-  debug: boolean = false
+  debug: boolean
 
   constructor(
     context: CanvasRenderingContext2D,
     rulesEngine: RulesEngine,
     aperture: number,
-    gridCols: number,
-    gridRows: number,
+    width: number,
+    height: number,
     cells?: Cell[]
   ) {
     this.context = context
     this.aperture = aperture
-    this.gridCols = gridCols
-    this.gridRows = gridRows
+    this.gridCols = width / aperture
+    this.gridRows = height / aperture
     this.rulesEngine = rulesEngine
+    this.debug = false
 
     // columnwise LtoR
     if (!cells) {
-      for (let x = 0; x < gridCols; x++) {
-        for (let y = 0; y < gridRows; y++) {
-          const cell = new Cell(x, y)
-          this.rulesEngine.cellCreateSignal(cell)
-          this.cellmatrix.push(cell)
-        }
-      }
+      this.tessellate()
     } else {
       this.cellmatrix = cells
     }
+
+    this.forceRedraw()
   }
 
   static fromGrid(
@@ -48,27 +45,38 @@ export class Grid {
       context,
       overrideRulesEngine ?? grid.rulesEngine,
       grid.aperture,
-      grid.gridCols,
-      grid.gridRows,
-      ([] as Cell[]).concat(grid.cellmatrix)
+      grid.gridCols * grid.aperture,
+      grid.gridRows * grid.aperture,
+      grid.cellmatrix.map((_) => Cell.fromCell(_))
     )
   }
 
-  cellAt(x: number, y: number): Cell | undefined {
+  private cellAt(x: number, y: number): Cell | undefined {
     // cell at (x,y) is at arr index  (x * gridRows) + y
     if (x < 0 || y < 0 || x >= this.gridCols || y >= this.gridRows) return undefined
     return this.cellmatrix[x * this.gridRows + y]
+  }
+
+  private tessellate() {
+    this.cellmatrix.length = 0
+    for (let x = 0; x < this.gridCols; x++) {
+      for (let y = 0; y < this.gridRows; y++) {
+        const cell = new Cell(x, y)
+        this.rulesEngine.cellCreateSignal(cell)
+        this.cellmatrix.push(cell)
+      }
+    }
   }
 
   toggleDebug() {
     this.debug = !this.debug
   }
 
-  updateCellStatus(cell: Cell) {
+  private updateCellStatus(cell: Cell) {
     this.rulesEngine.cellRespondEnvSignal(cell)
   }
 
-  render() {
+  private render() {
     for (let i = 0; i < this.cellmatrix.length; i++) {
       const cell = this.cellmatrix[i]
       this.updateCellStatus(cell)
@@ -102,19 +110,34 @@ export class Grid {
     this.render()
   }
 
-  clear() {
-    for (let i = 0; i < this.cellmatrix.length; i++) {
-      const cell = this.cellmatrix[i]
-      cell.wipe()
-      cell.render(this.context, this.aperture)
-    }
+  forceRedraw() {
+    // force "immediate" redraw outside of raf callbacks.
+    setTimeout(() => {
+      this.render()
+    }, 20)
   }
 
   reseed() {
-    for (let i = 0; i < this.cellmatrix.length; i++) {
-      const cell = this.cellmatrix[i]
-      this.rulesEngine.cellCreateSignal(cell)
-    }
-    this.iterate()
+    this.tessellate()
+    this.forceRedraw()
+  }
+
+  resize(width: number, height: number) {
+    // clear the old drawing area
+    this.context.clearRect(0, 0, this.gridCols * this.aperture, this.gridRows * this.aperture)
+
+    // new drawing area
+    this.gridCols = width / this.aperture
+    this.gridRows = height / this.aperture
+
+    this.reseed()
+  }
+
+  getSize() {
+    return [this.gridCols * this.aperture, this.gridRows * this.aperture]
+  }
+
+  list() {
+    this.cellmatrix.map((_) => console.log(_.label()))
   }
 }

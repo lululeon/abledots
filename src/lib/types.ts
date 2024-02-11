@@ -15,3 +15,14 @@ export type CellMeta = {
   neighborCount: number
   resourceCount: number
 }
+
+type LabelSetter = (label: string) => void
+export interface GOLApi {
+  startFn: () => void
+  pauseFn: () => void
+  isPlayingFn: () => boolean
+  togglePlayState: (LabelSetter: LabelSetter) => () => void
+  resetFn: () => void
+  resizeFn: (width: number, height: number) => void
+  toggleR20: () => void
+}

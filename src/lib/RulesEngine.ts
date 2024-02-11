@@ -1,7 +1,7 @@
-import type { Cell } from '../Cell'
-import { Rule } from '../types'
-import { DefaultB3S23 } from './DefaultB3S23'
-import { R20_RCELLS } from './R20_RCELLS'
+import type { Cell } from './Cell'
+import { Rule } from './types'
+import { DefaultB3S23 } from './rules/DefaultB3S23'
+import { R20_RCELLS } from './rules/R20_RCELLS'
 import type { RuleExpression } from './RuleExpression'
 
 export class RulesEngine {
